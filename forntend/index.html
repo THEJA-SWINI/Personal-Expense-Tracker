@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-icon">₹</div>
+                <div>
+                    <h1>SpendWise</h1>
+                    <p>Personal Expense Tracker</p>
+                </div>
+            </div>
+            <div class="live-status">
+                <span class="status-dot"></span>
+                Database Connected
+            </div>
+        </header>
+
+        <main>
+            <section class="welcome">
+                <div>
+                    <p class="eyebrow">YOUR FINANCIAL OVERVIEW</p>
+                    <h2>Track your money, <span>your way.</span></h2>
+                    <p class="welcome-text">Every expense tells a story. Understand yours.</p>
+                </div>
+                <div class="today-box">
+                    <span>📅</span>
+                    <div>
+                        <small>Today's date</small>
+                        <strong id="todayDate">Loading...</strong>
+                    </div>
+                </div>
+            </section>
+
+            <section class="summary-grid">
+                <article class="summary-card total-card">
+                    <div class="summary-top">
+                        <span>Total Amount Spent</span>
+                        <span class="summary-icon">₹</span>
+                    </div>
+                    <h3 id="totalAmount">₹0.00</h3>
+                    <p>Across all recorded expenses</p>
+                </article>
+
+                <article class="summary-card highest-card">
+                    <div class="summary-top">
+                        <span>Highest Expense</span>
+                        <span class="summary-icon">↗</span>
+                    </div>
+                    <h3 id="highestExpense">₹0.00</h3>
+                    <p>Your largest single expense</p>
+                </article>
+
+                <article class="summary-card average-card">
+                    <div class="summary-top">
+                        <span>Average Expense</span>
+                        <span class="summary-icon">∿</span>
+                    </div>
+                    <h3 id="averageExpense">₹0.00</h3>
+                    <p>Average per recorded expense</p>
+                </article>
+
+                <article class="summary-card count-card">
+                    <div class="summary-top">
+                        <span>Total Records</span>
+                        <span class="summary-icon">▤</span>
+                    </div>
+                    <h3 id="totalExpenses">0</h3>
+                    <p>Expenses stored in your database</p>
+                </article>
+            </section>
+
+            <section class="content-grid">
+                <article class="panel form-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <p class="eyebrow">NEW TRANSACTION</p>
+                            <h2>Add an Expense</h2>
+                        </div>
+                        <span class="heading-icon">＋</span>
+                    </div>
+
+                    <form id="expenseForm">
+                        <div class="form-group">
+                            <label for="title">Expense Title</label>
+                            <input type="text" id="title" name="title"
+                                placeholder="e.g. Grocery shopping" maxlength="100" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select id="category" name="category" required>
+                                    <option value="">Select category</option>
+                                    <option value="Food">Food</option>
+                                    <option value="Transport">Transport</option>
+                                    <option value="Bills">Bills</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Shopping">Shopping</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Health">Health</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="amount">Amount (₹)</label>
+                                <input type="number" id="amount" name="amount"
+                                    placeholder="0.00" min="0.01" step="0.01" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expense_date">Date</label>
+                                <input type="date" id="expense_date"
+                                    name="expense_date" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="payment_method">Payment Method</label>
+                                <select id="payment_method" name="payment_method" required>
+                                    <option value="">Select method</option>
+                                    <option value="UPI">UPI</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Credit Card">Credit Card</option>
+                                    <option value="Debit Card">Debit Card</option>
+                                    <option value="Net Banking">Net Banking</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="primary-button" id="submitButton">
+                            <span>＋</span> Add Expense
+                        </button>
+
+                        <p id="formMessage" class="form-message" role="status"></p>
+                    </form>
+                </article>
+
+                <article class="panel category-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <p class="eyebrow">SPENDING BREAKDOWN</p>
+                            <h2>By Category</h2>
+                        </div>
+                        <span class="heading-icon">◉</span>
+                    </div>
+                    <div id="categorySummary" class="category-list">
+                        <p class="empty-message">Loading category data...</p>
+                    </div>
+                </article>
+            </section>
+
+            <section class="panel transactions-panel">
+                <div class="panel-heading transactions-heading">
+                    <div>
+                        <p class="eyebrow">YOUR MONEY MOVEMENT</p>
+                        <h2>All Expenses</h2>
+                        <p class="panel-subtitle">Search, filter and manage your transactions.</p>
+                    </div>
+                    <span id="recordCount" class="record-badge">0 records</span>
+                </div>
+
+                <div class="filters">
+                    <div class="form-group search-group">
+                        <label for="search">Search by title</label>
+                        <input type="search" id="search" placeholder="Search expenses...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="filterCategory">Category</label>
+                        <select id="filterCategory">
+                            <option value="">All categories</option>
+                            <option value="Food">Food</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Bills">Bills</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Education">Education</option>
+                            <option value="Health">Health</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="filterPayment">Payment method</label>
+                        <select id="filterPayment">
+                            <option value="">All methods</option>
+                            <option value="UPI">UPI</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Credit Card">Credit Card</option>
+                            <option value="Debit Card">Debit Card</option>
+                            <option value="Net Banking">Net Banking</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="filterDate">Date</label>
+                        <input type="date" id="filterDate">
+                    </div>
+
+                    <button type="button" id="clearFilters" class="secondary-button">
+                        Clear Filters
+                    </button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Expense</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Payment Method</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expenseTableBody">
+                            <tr>
+                                <td colspan="7" class="empty-message">Loading expenses...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p id="tableMessage" class="table-message" role="status"></p>
+            </section>
+        </main>
+
+        <footer>
+            <p>SpendWise · Personal Expense Tracker</p>
+            <p>Built with HTML, CSS, JavaScript, Node.js & MySQL</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
